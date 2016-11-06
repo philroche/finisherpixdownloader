@@ -13,6 +13,37 @@ from gooey import Gooey
 
 FINISHERPIX_URL = "http://www.finisherpix.com/photos/my-photos/currency/EUR/pctrl/Photos/paction/search/pevent/%s/pbib/%s.html"
 
+
+def get_photos(race, bibs, path_prefix=''):
+    for bib in bibs:
+        bib = bib.strip()
+        bib_url = FINISHERPIX_URL % (race, bib)
+        photo_list_html = requests.get(bib_url)
+        soup = Soup(photo_list_html.text)
+        photo_list = select(
+            soup,
+            '.photocommercePhotosList .photocommercePhotoFrame img.lazy')
+        for photo in photo_list:
+            photo_url = photo['data-original']
+            photo_filename = photo_url.split('/')[-1]
+            bib_dir_path = os.path.join(path_prefix, race, bib)
+            if path_prefix and not os.path.exists(path_prefix):
+                os.makedirs(path_prefix)
+            if not os.path.exists(os.path.join(path_prefix, race)):
+                os.makedirs(os.path.join(path_prefix, race))
+            if not os.path.exists(bib_dir_path):
+                os.makedirs(bib_dir_path)
+            r = requests.get('http:%s' % photo_url, stream=True)
+            if r.status_code == 200:
+                with open(os.path.join(bib_dir_path, photo_filename), 'wb') \
+                        as f:
+                    for chunk in r.iter_content(1024):
+                        f.write(chunk)
+                    print('Downloaded http:%s to %s' % (photo_url,
+                                                        os.path.join(
+                                                            bib_dir_path,
+                                                            photo_filename)))
+        return bib_dir_path
 @Gooey
 def main():
     parser = argparse.ArgumentParser(
@@ -35,31 +66,9 @@ def main():
         print("You must specify at least one bib.")
 
     bibs = args.bibs_str.split(",")
-    for bib in bibs:
-        bib = bib.strip()
-        bib_url = FINISHERPIX_URL % (args.race, bib)
-        photo_list_html = requests.get(bib_url)
-        soup = Soup(photo_list_html.text)
-        photo_list = select(
-            soup,
-            '.photocommercePhotosList .photocommercePhotoFrame img.lazy')
-        for photo in photo_list:
-            photo_url = photo['data-original']
-            photo_filename = photo_url.split('/')[-1]
-            bib_dir_path = os.path.join(args.race, bib)
-            if not os.path.exists(args.race):
-                os.makedirs(args.race)
-            if not os.path.exists(bib_dir_path):
-                os.makedirs(bib_dir_path)
-            r = requests.get('http:%s' % photo_url, stream=True)
-            if r.status_code == 200:
-                with open(os.path.join(bib_dir_path,photo_filename), 'wb') as f:
-                    for chunk in r.iter_content(1024):
-                        f.write(chunk)
-                    print('Downloaded http:%s to %s' % (photo_url,
-                                                        os.path.join(
-                                                            bib_dir_path,
-                                                            photo_filename)))
+
+    get_photos(args.race, bibs)
+
 
 if __name__ == '__main__':
     main()

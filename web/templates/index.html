@@ -1,0 +1,11 @@
+$def with (zip_path)
+
+$if zip_path:
+    <a href="downloads/$zip_path">Download you photos </a>
+    <a href="./">Start Again</a>
+$else:
+    <form method="get" action="./">
+    <p>Race Tag: <input type="text" name="race" value="dublin-marathon-2016"/> </p>
+    <p>Bib Number: <input type="text" name="bib" value=""/> </p>
+        <p><input type="submit" value="Get Photos" /></p>
+    </form>
