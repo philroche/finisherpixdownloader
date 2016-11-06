@@ -1,11 +1,32 @@
-$def with (zip_path)
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Download your low resolution photos</title>
+</head>
 
-$if zip_path:
-    <a href="downloads/$zip_path">Download you photos </a>
+<body>
+<h1>If you like your photos please do purchase the high official resolution versions</h1>
+{% if zip_path %}
+    <a href="download/?filepath={{ zip_path }}">Download your photos </a>
+    <br />
+    <a href="http://www.finisherpix.com/photos/my-photos/currency/EUR/pctrl/Photos/paction/search/pevent/{{ race }}/pbib/{{ bib }}.html">Purchase photos</a>
+    <br />
+    <br />
     <a href="./">Start Again</a>
-$else:
+{% else %}
+
+    <p>This simple application will create zip archive that you can download which contains all of the
+        low resolution photos taken of you during your race. I do not wish to take away from the great work
+        finisherpix.com do, this is just a simple way to get the low resolution images for
+        preview before purchase of the high resolution ones.</p>
     <form method="get" action="./">
     <p>Race Tag: <input type="text" name="race" value="dublin-marathon-2016"/> </p>
     <p>Bib Number: <input type="text" name="bib" value=""/> </p>
-        <p><input type="submit" value="Get Photos" /></p>
+        <p><input type="submit" value="Get Zip file of low resolution photos" /></p>
     </form>
+{% endif %}
+<p>You can view the source of this application @ <a href="https://github.com/philroche/finisherpixdownloader">https://github.com/philroche/finisherpixdownloader</a></p>
+</body>
+
+</html>
