@@ -2,6 +2,7 @@
 import os
 import zipfile
 import cherrypy
+import shutil
 
 from jinja2 import Environment, FileSystemLoader
 from cherrypy.lib.static import serve_file
@@ -22,6 +23,7 @@ class FinisherPixDownloader(object):
     def index(self, race=None, bib=None):
         zip_path = None
         if bib and race:
+            bib_path = os.path.join('web/downloads', race, bib)
             zip_path = os.path.join('web/downloads', race, '%s.zip' % bib)
             # check to see if the photos already exist
             if not os.path.exists(zip_path):
@@ -31,6 +33,7 @@ class FinisherPixDownloader(object):
                 zipf = zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED)
                 zipdir(bib_dir_path, zipf)
                 zipf.close()
+                shutil.rmtree(bib_path)
         env = Environment(loader=FileSystemLoader('web/templates'))
         tmpl = env.get_template('index.html')
         return tmpl.render(zip_path=zip_path, bib=bib, race=race)
