@@ -1,3 +1,4 @@
+#!/usr/local/bin/python2.7
 import os
 import zipfile
 import cherrypy
@@ -44,7 +45,6 @@ cherrypy.config.update({
     'environment': 'production',
     'log.screen': False,
     'server.socket_host': '127.0.0.1',
-    'server.socket_port': 26100,
+    'server.socket_port': 28330,
 })
 cherrypy.quickstart(FinisherPixDownloader())
-

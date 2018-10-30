@@ -3,10 +3,9 @@ import argparse
 import requests
 from BeautifulSoup import BeautifulSoup as Soup
 from soupselect import select
-#from gooey import Gooey
+# from gooey import Gooey
 
-FINISHERPIX_URL = "http://www.finisherpix.com/photos/my-photos/currency/EUR/pctrl/Photos/paction/search/pevent/%s/pbib/%s.html"
-
+FINISHERPIX_URL = "http://www.finisherpix.com/gallery/photos/en/EUR/%s/%s"
 
 def get_photos(race, bibs, path_prefix=''):
     for bib in bibs:
@@ -38,17 +37,17 @@ def get_photos(race, bibs, path_prefix=''):
                                                             bib_dir_path,
                                                             photo_filename)))
         return bib_dir_path
-#@Gooey
+# @Gooey
 def main():
     parser = argparse.ArgumentParser(
         description='Simple app to download all low res images from '
                     'finisherpix.com for a given race and bib number')
     parser.add_argument('--race', action="store", dest="race",
                         required=True,
-                        default="dublin-marathon-2016",
+                        default="2506",
                         help="finisherpix.com tag for race. eg. "
-                             "dublin-marathon-2016 for "
-                             "Dublin city marathon 2016 ")
+                             "2506 for "
+                             "Dublin City Marathon 2018 ")
     parser.add_argument('--bib', action="store", dest="bibs_str",
                         required=True,
                         help="Separate multiple bibs with comma")

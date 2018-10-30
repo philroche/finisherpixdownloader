@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['finisherpixdownloader.py'],
-             pathex=['/home/philroche/PycharmProjects/finisherpixdownloader'],
+             pathex=['/home/philroche/Working/PersonalOSSProjects/finisherpixdownloader/'],
              binaries=None,
              datas=[('/home/philroche/.virtualenvs/finisherpixdownloader/lib/python2.7/site-packages/gooey/images','gooey/images'),
                     ('/home/philroche/.virtualenvs/finisherpixdownloader/lib/python2.7/site-packages/gooey/languages','gooey/languages')],
