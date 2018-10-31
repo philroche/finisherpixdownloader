@@ -3,7 +3,7 @@ import argparse
 import requests
 from BeautifulSoup import BeautifulSoup as Soup
 from soupselect import select
-# from gooey import Gooey
+from gooey import Gooey
 
 FINISHERPIX_URL = "http://www.finisherpix.com/gallery/photos/en/EUR/%s/%s"
 
@@ -37,7 +37,7 @@ def get_photos(race, bibs, path_prefix=''):
                                                             bib_dir_path,
                                                             photo_filename)))
         return bib_dir_path
-# @Gooey
+@Gooey
 def main():
     parser = argparse.ArgumentParser(
         description='Simple app to download all low res images from '
