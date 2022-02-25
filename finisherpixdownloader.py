@@ -5,7 +5,8 @@ from BeautifulSoup import BeautifulSoup as Soup
 from soupselect import select
 from gooey import Gooey
 
-FINISHERPIX_URL = "http://www.finisherpix.com/gallery/photos/en/EUR/%s/%s"
+FINISHERPIX_URL = "http://www.finisherpix.com/en/photos/%s/%s"
+
 
 def get_photos(race, bibs, path_prefix=''):
     for bib in bibs:
@@ -15,9 +16,9 @@ def get_photos(race, bibs, path_prefix=''):
         soup = Soup(photo_list_html.text)
         photo_list = select(
             soup,
-            '.photocommercePhotosList .photocommercePhotoFrame img.lazy')
+            '#photocommerce-photos-gallery .photocommerce-gallery-photo img')
         for photo in photo_list:
-            photo_url = photo['data-original']
+            photo_url = photo['src']
             photo_filename = photo_url.split('/')[-1]
             bib_dir_path = os.path.join(path_prefix, race, bib)
             if path_prefix and not os.path.exists(path_prefix):
@@ -26,7 +27,7 @@ def get_photos(race, bibs, path_prefix=''):
                 os.makedirs(os.path.join(path_prefix, race))
             if not os.path.exists(bib_dir_path):
                 os.makedirs(bib_dir_path)
-            r = requests.get('http:%s' % photo_url, stream=True)
+            r = requests.get(photo_url, stream=True)
             if r.status_code == 200:
                 with open(os.path.join(bib_dir_path, photo_filename), 'wb') \
                         as f:
@@ -37,17 +38,16 @@ def get_photos(race, bibs, path_prefix=''):
                                                             bib_dir_path,
                                                             photo_filename)))
         return bib_dir_path
-@Gooey
+#@Gooey
 def main():
     parser = argparse.ArgumentParser(
         description='Simple app to download all low res images from '
                     'finisherpix.com for a given race and bib number')
     parser.add_argument('--race', action="store", dest="race",
                         required=True,
-                        default="2506",
+                        default="3212",
                         help="finisherpix.com tag for race. eg. "
-                             "2506 for "
-                             "Dublin City Marathon 2018 ")
+                             "3212 for Dublin City Marathon 2019")
     parser.add_argument('--bib', action="store", dest="bibs_str",
                         required=True,
                         help="Separate multiple bibs with comma")
